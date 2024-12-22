@@ -19,6 +19,9 @@ services:
       - gitlab_config:/etc/gitlab
       - gitlab_logs:/var/log/gitlab
       - gitlab_data:/var/opt/gitlab
+    networks:
+      - gitlab-network
+
 
   gitlab-runner:
     image: gitlab/gitlab-runner:latest
@@ -29,20 +32,39 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - gitlab_runner_config:/etc/gitlab-runner
     environment:
-      - REGISTRATION_TOKEN=<your_registration_token>
-      - CI_SERVER_URL=http://gitlab.local
+      - CI_SERVER_URL=http://gitlab
+      - KUBECONFIG=/root/.kube/config
+#    command:
+#      - register
+#      - --non-interactive
+#      - --url=http://gitlab
+#      - --registration-token=glrt-t3_rq8mFsm1bR1HGKKz8gx6
+#      - --executor=docker
+#      - --description="Local GitLab Runner"
+#      - --docker-image="docker:latest"
+    command: ["run", "--user=root", "--working-directory=/home/gitlab-runner"]
 
-#  minikube:
-#    image: gcr.io/k8s-minikube/kicbase:v0.0.35
-#    container_name: minikube
-#    privileged: true
-#    volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock
-#      - ~/.kube:/root/.kube
-#      - ~/.minikube:/root/.minikube
-#    environment:
-#      - MINIKUBE_IN_STYLE=false
-#    command: ["sleep", "infinity"]
+    networks:
+      - gitlab-network
+
+
+  minikube:
+    image: gcr.io/k8s-minikube/kicbase:v0.0.35
+    container_name: minikube
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.minikube:/root/.minikube
+      - /root/.kube:/root/.kube
+    environment:
+      - MINIKUBE_IN_STYLE=false
+    networks:
+      - gitlab-network
+    command: ["sleep", "infinity"]
+
+networks:
+  gitlab-network:
+    driver: bridge
 
 volumes:
   gitlab_config:
