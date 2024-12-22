@@ -24,10 +24,10 @@ stages:
 #  - deploy
 
 
-default:
-  image: docker:latest
-  services:
-    - docker:dind
+#default:
+#  image: docker:latest
+#  services:
+#    - docker:dind
 
 build:
   stage: build
