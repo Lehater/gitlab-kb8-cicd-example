@@ -1,4 +1,4 @@
-version: '3.8'
+#version: '3.8'
 
 services:
   gitlab:
@@ -10,11 +10,14 @@ services:
         external_url 'http://gitlab'
         gitlab_rails['lfs_enabled'] = true
         gitlab_rails['registry_enabled'] = true
-        gitlab_rails['gitlab_shell_ssh_port'] = 2222
+        gitlab_rails['registry_host'] = 'gitlab'
+        gitlab_rails['registry_port'] = '5050'
+        gitlab_rails['gitlab_shell_ssh_port'] = '2222'
     ports:
       - "80:80"
       - "443:443"
       - "2222:22"
+      - "5050:5050"  # Порт для контейнерного реестра
     volumes:
       - gitlab_config:/etc/gitlab
       - gitlab_logs:/var/log/gitlab
@@ -23,44 +26,44 @@ services:
       - gitlab-network
 
 
-  gitlab-runner:
-    image: gitlab/gitlab-runner:latest
-    container_name: gitlab-runner
-    depends_on:
-      - gitlab
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - gitlab_runner_config:/etc/gitlab-runner
-    environment:
-      - CI_SERVER_URL=http://gitlab
-      - KUBECONFIG=/root/.kube/config
-#    command:
-#      - register
-#      - --non-interactive
-#      - --url=http://gitlab
-#      - --registration-token=glrt-t3_rq8mFsm1bR1HGKKz8gx6
-#      - --executor=docker
-#      - --description="Local GitLab Runner"
-#      - --docker-image="docker:latest"
-    command: ["run", "--user=root", "--working-directory=/home/gitlab-runner"]
+#  gitlab-runner:
+#    image: gitlab/gitlab-runner:latest
+#    container_name: gitlab-runner
+#    depends_on:
+#      - gitlab
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - gitlab_runner_config:/etc/gitlab-runner
+#    environment:
+#      - CI_SERVER_URL=http://gitlab
+#      - KUBECONFIG=/root/.kube/config
+##    command:
+##      - register
+##      - --non-interactive
+##      - --url=http://gitlab
+##      - --registration-token=glrt-t3_rq8mFsm1bR1HGKKz8gx6
+##      - --executor=docker
+##      - --description="Local GitLab Runner"
+##      - --docker-image="docker:latest"
+#    command: ["run", "--user=root", "--working-directory=/home/gitlab-runner"]
+#
+#    networks:
+#      - gitlab-network
 
-    networks:
-      - gitlab-network
 
-
-  minikube:
-    image: gcr.io/k8s-minikube/kicbase:v0.0.35
-    container_name: minikube
-    privileged: true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /root/.minikube:/root/.minikube
-      - /root/.kube:/root/.kube
-    environment:
-      - MINIKUBE_IN_STYLE=false
-    networks:
-      - gitlab-network
-    command: ["sleep", "infinity"]
+#  minikube:
+#    image: gcr.io/k8s-minikube/kicbase:v0.0.35
+#    container_name: minikube
+#    privileged: true
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - /root/.minikube:/root/.minikube
+#      - /root/.kube:/root/.kube
+#    environment:
+#      - MINIKUBE_IN_STYLE=false
+#    networks:
+#      - gitlab-network
+#    command: ["sleep", "infinity"]
 
 networks:
   gitlab-network:
