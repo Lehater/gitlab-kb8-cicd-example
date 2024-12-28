@@ -39,13 +39,13 @@ build_master:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
   script:
-#    - export DOCKER_TAG="latest"
-#    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
-    - echo "=== Сборка Docker-образа ==="
+    - export DOCKER_TAG="latest"
+    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
+    - echo "=== Сборка Docker-образа $DOCKER_IMAGE ==="
 #    - docker build -t "$DOCKER_IMAGE" .
     - echo "=== Вход в Docker Registry ==="
 #    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-    - echo "=== Пуш Docker-образа ==="
+    - echo "=== Пуш Docker-образа $DOCKER_IMAGE ==="
 #    - docker push "$DOCKER_IMAGE"
   only:
     - master
@@ -66,7 +66,7 @@ deploy_staging:
   stage: deploy_staging
   image: alpine/git
   script:
-    - echo "=== Обновление манифестов для staging с использованием образа ==="
+    - echo "=== Обновление манифестов для staging с использованием образа $DOCKER_IMAGE ==="
 #    - sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/staging/deployment.yaml
 #    - git add k8s/staging/deployment.yaml
 #    - git commit -m "Update staging image to $DOCKER_TAG for develop [skip ci]"
@@ -82,7 +82,7 @@ deploy_production:
   stage: deploy_production
   image: alpine/git
   script:
-    - echo "=== Обновление манифестов для production с использованием образа ==="
+    - echo "=== Обновление манифестов для production с использованием образа $DOCKER_IMAGE ==="
 #    - sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yaml
 #    - git add k8s/production/deployment.yaml
 #    - git commit -m "Update production image to $DOCKER_TAG for master [skip ci]"
