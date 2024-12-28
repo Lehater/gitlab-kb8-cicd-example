@@ -20,12 +20,16 @@ build:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
   script:
-#    - |
-#      if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+    # Установка тега Docker-образа в зависимости от ветки
+    # Раскомментируйте следующие строки для динамического тегирования
+    # - |
+    #   if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
     - export DOCKER_TAG="latest"
-#      else
-#        export DOCKER_TAG="${CI_COMMIT_REF_SLUG}"
-#      fi
+    #   else
+    #     export DOCKER_TAG="${CI_COMMIT_REF_SLUG}"
+    #   fi
+
+    # Основные команды сборки и пуша Docker-образа
     - echo "=== Сборка Docker-образа $DOCKER_IMAGE ==="
     - docker build -t "$DOCKER_IMAGE" .
     - echo "=== Вход в Docker Registry ==="
@@ -40,6 +44,7 @@ test:
   stage: test
   image: eclipse-temurin:17
   script:
+    # Основные команды тестирования приложения
     - echo "=== Запуск заглушки тестов для Java 17 приложения ==="
     - echo "Выполнение тестов..."
     - echo "Тесты пройдены (заглушка)!"
@@ -47,32 +52,32 @@ test:
     - develop
     - master
 
-deploy_staging:
-  stage: deploy_staging
-  image: alpine/git
-  only:
-    - develop
-  script:
-    - echo "=== Обновление манифестов для staging с использованием образа $DOCKER_IMAGE ==="
-    - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/staging/deployment.yaml'
-    - git add k8s/staging/deployment.yaml
-    - git commit -m "Update staging image to $DOCKER_TAG for develop [skip ci]"
-    - git push origin HEAD:develop
-  environment:
-    name: staging
-    url: "http://example-staging-url"
+# deploy_staging:
+#   stage: deploy_staging
+#   image: alpine/git
+#   only:
+#     - develop
+#   script:
+#     - echo "=== Обновление манифестов для staging с использованием образа $DOCKER_IMAGE ==="
+#     - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/staging/deployment.yaml'
+#     - git add k8s/staging/deployment.yaml
+#     - git commit -m "Update staging image to $DOCKER_TAG for develop [skip ci]"
+#     - git push origin HEAD:develop
+#   environment:
+#     name: staging
+#     url: "http://example-staging-url"
 
-deploy_production:
-  stage: deploy_production
-  image: alpine/git
-  only:
-    - master
-  script:
-    - echo "=== Обновление манифестов для production с использованием образа $DOCKER_IMAGE ==="
-    - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yaml'
-    - git add k8s/production/deployment.yaml
-    - git commit -m "Update production image to $DOCKER_TAG for master [skip ci]"
-    - git push origin HEAD:master
-  environment:
-    name: production
-    url: "http://example-production-url"
+# deploy_production:
+#   stage: deploy_production
+#   image: alpine/git
+#   only:
+#     - master
+#   script:
+#     - echo "=== Обновление манифестов для production с использованием образа $DOCKER_IMAGE ==="
+#     - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yaml'
+#     - git add k8s/production/deployment.yaml
+#     - git commit -m "Update production image to $DOCKER_TAG for master [skip ci]"
+#     - git push origin HEAD:master
+#   environment:
+#     name: production
+#     url: "http://example-production-url"
