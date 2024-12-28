@@ -4,21 +4,20 @@ stages:
   - deploy_staging
   - deploy_production
 
-# Переменные для формирования тега образа.
-# Если ветка master, используем latest, иначе — <имя_ветки>.
+# Переменные для формирования тега образа
 variables:
   DOCKER_TAG: >
     $([[ "${CI_COMMIT_REF_NAME}" == "master" ]] && echo "latest" || echo "${CI_COMMIT_REF_SLUG}")
   DOCKER_IMAGE: "${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
 
+# Настройки Git для коммитов и пушей из CI/CD
 before_script:
   - git config --global user.email "ci@example.com"
   - git config --global user.name "CI/CD"
 
-# 1. Сборка Docker-образа приложения (Java 17)
+# 1. Стадия сборки Docker-образа
 build:
   stage: build
-  # Используем docker:dind для сборки образа
   image: docker:latest
   services:
     - docker:dind
@@ -26,59 +25,64 @@ build:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
   script:
-    - echo "=== Building Docker image: $DOCKER_IMAGE ==="
+    - echo "=== Сборка Docker-образа: $DOCKER_IMAGE ==="
     - docker build -t "$DOCKER_IMAGE" .
-    - echo "=== Logging in to registry ==="
+    - echo "=== Вход в Docker Registry ==="
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-    - echo "=== Pushing Docker image: $DOCKER_IMAGE ==="
+    - echo "=== Пуш Docker-образа: $DOCKER_IMAGE ==="
     - docker push "$DOCKER_IMAGE"
   only:
     - develop
     - master
 
-# 2. Тестирование (заглушка), приложение на Java 17
+# 2. Стадия тестирования (заглушка) для Java 17 приложения
 test:
   stage: test
-  # Для заглушки выберем образ с Java 17 (например, eclipse-temurin)
   image: eclipse-temurin:17
   script:
-    - echo "=== Stub tests for Java 17 application ==="
-    - echo "Running tests..."
-    - echo "Tests passed (stub)!"
+    - echo "=== Запуск заглушки тестов для Java 17 приложения ==="
+    - echo "Выполнение тестов..."
+    - echo "Тесты пройдены (заглушка)!"
   only:
     - develop
     - master
 
-# 3. Деплой в Staging окружение (ветка develop)
+# 3. Стадия деплоя в Staging окружение (ветка develop)
 deploy_staging:
   stage: deploy_staging
   image: alpine/git
   only:
     - develop
   script:
-    - echo "=== Updating staging manifests to use $DOCKER_IMAGE ==="
-    # Предполагаем, что deployment.yaml лежит в k8s/staging/deployment.yaml
+    - echo "=== Обновление манифестов для staging с использованием образа $DOCKER_IMAGE ==="
+    # Обновляем тег образа в k8s/staging/deployment.yaml
     - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/staging/deployment.yaml'
+    # Добавляем изменения в git
     - git add k8s/staging/deployment.yaml
-    - git commit -m "Update staging image to $DOCKER_TAG [skip ci]"
+    # Коммитим изменения с [skip ci], чтобы избежать повторного запуска пайплайна
+    - git commit -m "Update staging image to $DOCKER_TAG for develop [skip ci]"
+    # Пушим изменения обратно в ветку develop
     - git push origin HEAD:develop
   environment:
     name: staging
-    url: "http://example-staging-url"   # при необходимости укажите реальный URL
+    url: "http://192.168.49.2:30080"
 
-# 4. Деплой в Production окружение (ветка master)
+# 4. Стадия деплоя в Production окружение (ветка master)
 deploy_production:
   stage: deploy_production
   image: alpine/git
   only:
     - master
   script:
-    - echo "=== Updating production manifests to use $DOCKER_IMAGE ==="
-    # Предполагаем, что deployment.yaml лежит в k8s/production/deployment.yaml
+    - echo "=== Обновление манифестов для production с использованием образа $DOCKER_IMAGE ==="
+    # Обновляем тег образа в k8s/production/deployment.yaml
     - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yaml'
+    # Добавляем изменения в git
     - git add k8s/production/deployment.yaml
-    - git commit -m "Update production image to $DOCKER_TAG [skip ci]"
+    # Коммитим изменения с [skip ci], чтобы избежать повторного запуска пайплайна
+    - git commit -m "Update production image to $DOCKER_TAG for master [skip ci]"
+    # Пушим изменения обратно в ветку master
     - git push origin HEAD:master
   environment:
     name: production
-    url: "http://example-production-url"
+    url: "http://192.168.49.2:30080"
