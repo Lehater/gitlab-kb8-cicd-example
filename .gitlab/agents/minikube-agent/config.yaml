@@ -8,7 +8,7 @@ gitops:
   manifest_projects:
     - id: "root/gitlab-kb8-cicd-example"   # или <числовой ID проекта>
       paths:
-        - path: "k8s/"             # папка с манифестами в репозитории
-      deploy_agent:
-        kubectl:
-        # Доп. настройки kubectl apply
+        - path: "k8s/staging"             # папка с манифестами в репозитории
+#      deploy_agent:
+#        kubectl:
+#        # Доп. настройки kubectl apply
