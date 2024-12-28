@@ -1,9 +1,49 @@
 stages:
+  - build
   - test
+  - update_manifests
 
-test-job:
-  stage: test
+variables:
+  DOCKER_IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}"
+
+before_script:
+  - git config --global user.email "ci@example.com"
+  - git config --global user.name "CI/CD"
+
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
   script:
-    - echo "Runner is working!"
-  tags:
-    - minikube
+    - docker build -t $DOCKER_IMAGE .
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker push $DOCKER_IMAGE
+  only:
+    - develop
+    - master
+
+test:
+  stage: test
+  image: node:14 # Замените на ваш стек
+  script:
+    - npm install
+    - npm test
+  only:
+    - develop
+    - master
+
+update_manifests:
+  stage: update_manifests
+  image: alpine/git
+  script:
+    - sed -i "s|image: registry.gitlab.local:5050/myapp:.*|image: $DOCKER_IMAGE|" k8s/${CI_COMMIT_REF_SLUG}/deployment.yaml
+    - git add k8s/${CI_COMMIT_REF_SLug}/deployment.yaml
+    - git commit -m "Update image to $CI_COMMIT_REF_SLUG for ${CI_COMMIT_REF_SLUG}"
+    - git push origin HEAD:${CI_COMMIT_REF_SLUG}
+  only:
+    - develop
+    - master
