@@ -1,21 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app
+  name: myapp-staging
   labels:
-    app: my-app
+    app: myapp
+    environment: staging
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: my-app
+      app: myapp
+      environment: staging
   template:
     metadata:
       labels:
-        app: my-app
+        app: myapp
+        environment: staging
     spec:
       containers:
-        - name: my-app
-          image: $DOCKER_IMAGE:latest
+        - name: myapp
+          image: registry.gitlab.local:5050/myapp:staging
           ports:
             - containerPort: 80
