@@ -50,7 +50,7 @@ build_main:
     - echo "=== Пуш Docker-образа ==="
 #    - docker push "$DOCKER_IMAGE"
   only:
-    - main
+    - main1
 
 # Стадия тестирования для всех веток
 test:
@@ -60,7 +60,7 @@ test:
     - echo "=== Запуск тестов для Java 17 приложения ==="
   only:
     - develop
-    - main
+    - main1
 
 # Стадия деплоя в staging для ветки develop
 deploy_staging:
@@ -84,16 +84,16 @@ deploy_staging:
 deploy_production:
   stage: deploy_production
   image: alpine/git
-  variables:
-    DOCKER_TAG: "develop"
+#  variables:
+#    DOCKER_TAG: "develop"
   script:
     - git config --global user.email "ci@example.com"
     - git config --global user.name "CI/CD"
     - echo "=== Обновление манифестов для production с использованием образа ==="
-    - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yaml'
-    - git add k8s/production/deployment.yaml
-    - git commit -m "Update production image to $DOCKER_TAG for master [skip ci]"
-    - git push origin HEAD:master
+#    - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yaml'
+#    - git add k8s/production/deployment.yaml
+#    - git commit -m "Update production image to $DOCKER_TAG for master [skip ci]"
+#    - git push origin HEAD:master
   environment:
     name: production
 #    url: "http://example-production-url"
