@@ -12,14 +12,22 @@ build_main:
   script:
     - export DOCKER_TAG="production"
     - export DOCKER_IMAGE="my-app:${DOCKER_TAG}"
-    # Для отладки покажем значения переменных
-    - echo "$REGISTRY_PASSWORD", "$CI_REGISTRY", "$REGISTRY_USER"
-    # Логин в реестр (важно: вы должны прописать "insecure-registries" на самом хосте)
-    - echo "$REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$REGISTRY_USER" --password-stdin
-    # Сборка образа
-    - docker build -t 192.168.88.83:5050/root/"$DOCKER_IMAGE" .
-    # Пуш образа
-    - docker push 192.168.88.83:5050/root/"$DOCKER_IMAGE"
+#    # Для отладки покажем значения переменных
+#    - echo "$CI_REGISTRY_PASSWORD", "$CI_REGISTRY", "$CI_REGISTRY_USER"
+#    # Логин в реестр (важно: вы должны прописать "insecure-registries" на самом хосте)
+#    - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
+#    # Сборка образа
+#    - docker build -t 192.168.88.83:5050/root/"$DOCKER_IMAGE" .
+#    # Пуш образа
+#    - docker push 192.168.88.83:5050/root/"$DOCKER_IMAGE"
+    # Логин в Docker Registry
+    - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
+    # Сборка образа с локальным тегом
+    - docker build -t "$DOCKER_IMAGE" .
+    # Тегирование образа для реестра
+    - docker tag "$DOCKER_IMAGE" "$CI_REGISTRY/root/$DOCKER_IMAGE"
+    # Пуш образа в реестр
+    - docker push "$CI_REGISTRY/root/$DOCKER_IMAGE"
   only:
     - main
 
