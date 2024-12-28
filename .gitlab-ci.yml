@@ -22,8 +22,8 @@ build_main:
     - echo "$CI_REGISTRY_PASSWORD", "$CI_REGISTRY","$CI_REGISTRY_USER"
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
 #    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "https://gitlab.local:5050/v2/"
-    - docker build -t "$DOCKER_IMAGE" .
-    - docker push "$DOCKER_IMAGE"
+    - docker build -t 192.168.88.83:5080/root/"$DOCKER_IMAGE" .
+    - docker push 192.168.88.83:5080/root/"$DOCKER_IMAGE"
   only:
     - main
 
