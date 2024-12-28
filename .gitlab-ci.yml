@@ -9,28 +9,28 @@ stages:
 #  - git config --global user.name "CI/CD"
 
 # Стадия сборки для ветки develop
-build_develop:
-  stage: build
-  image: openjdk:17-alpine
-  #  services:
-  #    - docker:dind
-  variables:
-    DOCKER_TAG: "develop"
-    DOCKER_IMAGE: "${CI_REGISTRY_IMAGE}:develop"
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
-  script:
-    #    - export DOCKER_TAG="develop"
-    #    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
-    - echo "=== Сборка Docker-образа ${DOCKER_IMAGE} ==="
-    #    - docker build -t "$DOCKER_IMAGE" .
-    - echo "=== Вход в Docker Registry ==="
-    #    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-    - echo "=== Пуш Docker-образа ${DOCKER_IMAGE} ==="
-  #    - docker push "$DOCKER_IMAGE"
-  only:
-    - develop
-#
+#build_develop:
+#  stage: build
+#  image: openjdk:17-alpine
+#  #  services:
+#  #    - docker:dind
+#  variables:
+#    DOCKER_TAG: "develop"
+#    DOCKER_IMAGE: "${CI_REGISTRY_IMAGE}:develop"
+#    DOCKER_DRIVER: overlay2
+#    DOCKER_TLS_CERTDIR: ""
+#  script:
+#    #    - export DOCKER_TAG="develop"
+#    #    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
+#    - echo "=== Сборка Docker-образа ${DOCKER_IMAGE} ==="
+#    #    - docker build -t "$DOCKER_IMAGE" .
+#    - echo "=== Вход в Docker Registry ==="
+#    #    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+#    - echo "=== Пуш Docker-образа ${DOCKER_IMAGE} ==="
+#  #    - docker push "$DOCKER_IMAGE"
+#  only:
+#    - develop
+##
 
 
 #variables:
@@ -61,7 +61,7 @@ build_develop:
 # Стадия сборки для ветки master
 build_main:
   stage: build
-  image: openjdk:17-alpine
+  image: docker:stable
   services:
     - docker:dind
   variables:
@@ -69,6 +69,7 @@ build_main:
     TERRAFORM_IMAGE_NAME: $CI_REGISTRY_IMAGE/terraform
     DOCKER_TLS_CERTDIR: "/certs"
   script:
+    - docker info
     - export DOCKER_TAG="production"
 #    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
     - export DOCKER_IMAGE="my-app:${DOCKER_TAG}"
