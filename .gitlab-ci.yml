@@ -17,7 +17,7 @@ build_main:
     # Сборка образа с локальным тегом
     - docker build -t $CI_REGISTRY/root/gitlab-kb8-cicd-example/$DOCKER_IMAGE .
     # Пуш образа в реестр
-    - docker push $CI_REGISTRY//root/gitlab-kb8-cicd-example/$DOCKER_IMAGE
+    - docker push $CI_REGISTRY/root/gitlab-kb8-cicd-example/$DOCKER_IMAGE
   only:
     - main
 
