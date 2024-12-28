@@ -1,8 +1,8 @@
 stages:
-  - build
+#  - build
   - test
-  - deploy_staging
-  - deploy_production
+#  - deploy_staging
+#  - deploy_production
 
 before_script:
   - git config --global user.email "ci@example.com"
