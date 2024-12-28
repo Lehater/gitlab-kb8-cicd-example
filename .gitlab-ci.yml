@@ -81,22 +81,34 @@ deploy_staging:
     - develop
 
 # Стадия деплоя в production для ветки master
+#deploy_production:
+#  stage: deploy_production
+##  image: alpine/git
+##  variables:
+##    DOCKER_TAG: "develop"
+#  script:
+#    - apk add --no-cache git
+#    - git config --global user.email "ci@example.com"
+#    - git config --global user.name "CI/CD"
+#    - echo "=== Обновление манифестов для production с использованием образа ==="
+#    - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yml'
+#    - git add k8s/production/deployment.yaml
+#    - git commit -m "Update production image to $DOCKER_TAG for master [skip ci]"
+#    - git push origin HEAD:master
+#  environment:
+#    name: production
+##    url: "http://example-production-url"
+#  only:
+#    - main
+
 deploy_production:
   stage: deploy_production
-#  image: alpine/git
-#  variables:
-#    DOCKER_TAG: "develop"
+  image: registry.gitlab.com/gitlab-org/cluster-integration/agentk:stable
   script:
-    - apk add --no-cache git
-    - git config --global user.email "ci@example.com"
-    - git config --global user.name "CI/CD"
-    - echo "=== Обновление манифестов для production с использованием образа ==="
-    - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yml'
-    - git add k8s/production/deployment.yaml
-    - git commit -m "Update production image to $DOCKER_TAG for master [skip ci]"
-    - git push origin HEAD:master
+    - echo "Deploy to Production..."
+    - kubectl apply -f k8s/production
   environment:
     name: production
-#    url: "http://example-production-url"
   only:
+    - tags
     - main
