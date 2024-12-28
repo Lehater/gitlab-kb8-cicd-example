@@ -7,23 +7,19 @@ stages:
 # Стадия сборки для ветки master
 build_main:
   stage: build
-  image: docker:stable
-#  services:
-#    - name: docker:dind
+  image: docker:latest
+  services:
+    - docker:dind
 #      alias: docker
 #  variables:
 #    DOCKER_HOST: tcp://docker:2375
 #    DOCKER_TLS_CERTDIR: ""
 #    DOCKER_DRIVER: overlay2
   script:
-#    - docker info
     - export DOCKER_TAG="production"
     - export DOCKER_IMAGE="my-app:${DOCKER_TAG}"
-    - echo "=== Сборка Docker-образа ==="
-    - docker build -t "$DOCKER_IMAGE" .
-    - echo "=== Вход в Docker Registry ==="
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-    - echo "=== Пуш Docker-образа ==="
+    - docker build -t "$DOCKER_IMAGE" .
     - docker push "$DOCKER_IMAGE"
   only:
     - main
