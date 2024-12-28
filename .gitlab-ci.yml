@@ -87,10 +87,10 @@ deploy_production:
 #  variables:
 #    DOCKER_TAG: "develop"
   script:
-    - git config --global user.email "ci@example.com"
-    - git config --global user.name "CI/CD"
     - echo "=== Обновление манифестов для production с использованием образа ==="
     - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yaml'
+    - git config --global user.email "ci@example.com"
+    - git config --global user.name "CI/CD"
     - git add k8s/production/deployment.yaml
     - git commit -m "Update production image to $DOCKER_TAG for master [skip ci]"
     - git push origin HEAD:master
