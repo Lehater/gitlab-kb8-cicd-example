@@ -11,40 +11,40 @@ stages:
 # Стадия сборки для ветки develop
 build_develop:
   stage: build
-#  image: docker:latest
-#  services:
-#    - docker:dind
-#  variables:
-#    DOCKER_DRIVER: overlay2
-#    DOCKER_TLS_CERTDIR: ""
+  #  image: docker:latest
+  #  services:
+  #    - docker:dind
+  #  variables:
+  #    DOCKER_DRIVER: overlay2
+  #    DOCKER_TLS_CERTDIR: ""
   script:
-#    - export DOCKER_TAG="develop"
-#    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
+    #    - export DOCKER_TAG="develop"
+    #    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
     - echo "=== Сборка Docker-образа ==="
-#    - docker build -t "$DOCKER_IMAGE" .
+    #    - docker build -t "$DOCKER_IMAGE" .
     - echo "=== Вход в Docker Registry ==="
-#    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    #    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
     - echo "=== Пуш Docker-образа ==="
-#    - docker push "$DOCKER_IMAGE"
-#    only:
-#      - develop
+  #    - docker push "$DOCKER_IMAGE"
+  only:
+    - develop
 #
 # Стадия сборки для ветки master
 build_master:
   stage: build
-#  image: docker:latest
-#  services:
-#    - docker:dind
-#  variables:
-#    DOCKER_DRIVER: overlay2
-#    DOCKER_TLS_CERTDIR: ""
+  #  image: docker:latest
+  #  services:
+  #    - docker:dind
+  #  variables:
+  #    DOCKER_DRIVER: overlay2
+  #    DOCKER_TLS_CERTDIR: ""
   script:
-#    - export DOCKER_TAG="latest"
-#    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
+    #    - export DOCKER_TAG="latest"
+    #    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
     - echo "=== Сборка Docker-образа ==="
-#    - docker build -t "$DOCKER_IMAGE" .
+    #    - docker build -t "$DOCKER_IMAGE" .
     - echo "=== Вход в Docker Registry ==="
-#    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    #    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
     - echo "=== Пуш Docker-образа ==="
 #    - docker push "$DOCKER_IMAGE"
 #  only:
@@ -53,42 +53,42 @@ build_master:
 # Стадия тестирования для всех веток
 test:
   stage: test
-#  image: eclipse-temurin:17
+  #  image: eclipse-temurin:17
   script:
     - echo "=== Запуск тестов для Java 17 приложения ==="
-#    - ./run_tests.sh  # Замените на реальные команды тестирования
-#  only:
-#    - develop
-#    - master
+  #    - ./run_tests.sh  # Замените на реальные команды тестирования
+  only:
+    - develop
+    - master
 
 # Стадия деплоя в staging для ветки develop
 deploy_staging:
   stage: deploy_staging
-#  image: alpine/git
+  #  image: alpine/git
   script:
     - echo "=== Обновление манифестов для staging с использованием образа ==="
-#    - sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/staging/deployment.yaml
-#    - git add k8s/staging/deployment.yaml
-#    - git commit -m "Update staging image to $DOCKER_TAG for develop [skip ci]"
-#    - git push origin HEAD:develop
+  #    - sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/staging/deployment.yaml
+  #    - git add k8s/staging/deployment.yaml
+  #    - git commit -m "Update staging image to $DOCKER_TAG for develop [skip ci]"
+  #    - git push origin HEAD:develop
   environment:
     name: staging
     url: "http://example-staging-url"
-#  only:
-#    - develop
+  only:
+    - develop
 
 # Стадия деплоя в production для ветки master
 deploy_production:
   stage: deploy_production
-#  image: alpine/git
+  #  image: alpine/git
   script:
     - echo "=== Обновление манифестов для production с использованием образа ==="
-#    - sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yaml
-#    - git add k8s/production/deployment.yaml
-#    - git commit -m "Update production image to $DOCKER_TAG for master [skip ci]"
-#    - git push origin HEAD:master
+  #    - sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yaml
+  #    - git add k8s/production/deployment.yaml
+  #    - git commit -m "Update production image to $DOCKER_TAG for master [skip ci]"
+  #    - git push origin HEAD:master
   environment:
     name: production
     url: "http://example-production-url"
-#  only:
-#    - master
+  only:
+    - master
