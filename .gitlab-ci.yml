@@ -31,6 +31,33 @@ build_develop:
   only:
     - develop
 #
+
+
+#variables:
+#  DOCKER_DRIVER: overlay2  # Improves performance.
+#  # https://gitlab.com/help/user/project/container_registry
+#  TERRAFORM_IMAGE_NAME: $CI_REGISTRY_IMAGE/terraform
+#
+#Build Docker image:
+#  stage: build
+#  only:
+#    changes:
+#      - docker/terraform/**
+#      - .gitlab-ci.yml
+#  interruptible: true
+#  image: docker:stable
+#  # Docker-in-Docker service is required to build Docker images.
+#  # https://gitlab.com/help/ci/docker/using_docker_build.md
+#  # https://gitlab.com/gitlab-org/charts/gitlab/issues/478#note_215249152
+#  services:
+#    - docker:dind
+#  script:
+#    - docker info
+#    - docker -D login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+#    - docker -D build -t $TERRAFORM_IMAGE_NAME docker/terraform/  # Dockerfile lives here.
+#    - docker -D push $TERRAFORM_IMAGE_NAME
+
+
 # Стадия сборки для ветки master
 build_main:
   stage: build
@@ -39,10 +66,12 @@ build_main:
     - docker:dind
   variables:
     DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
+    TERRAFORM_IMAGE_NAME: $CI_REGISTRY_IMAGE/terraform
+    DOCKER_TLS_CERTDIR: "/certs"
   script:
-    - export DOCKER_TAG="latest"
-    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
+    - export DOCKER_TAG="production"
+#    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
+    - export DOCKER_IMAGE="my-app:${DOCKER_TAG}"
     - echo "=== Сборка Docker-образа ==="
     - docker build -t "$DOCKER_IMAGE" .
     - echo "=== Вход в Docker Registry ==="
