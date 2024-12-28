@@ -4,18 +4,15 @@ stages:
   - deploy_staging
   - deploy_production
 
-# Переменные для формирования тега образа
 variables:
   DOCKER_TAG: >
     $([[ "${CI_COMMIT_REF_NAME}" == "master" ]] && echo "latest" || echo "${CI_COMMIT_REF_SLUG}")
   DOCKER_IMAGE: "${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
 
-# Настройки Git для коммитов и пушей из CI/CD
 before_script:
   - git config --global user.email "ci@example.com"
   - git config --global user.name "CI/CD"
 
-# 1. Стадия сборки Docker-образа
 build:
   stage: build
   image: docker:latest
@@ -35,7 +32,6 @@ build:
     - develop
     - master
 
-# 2. Стадия тестирования (заглушка) для Java 17 приложения
 test:
   stage: test
   image: eclipse-temurin:17
@@ -47,7 +43,6 @@ test:
     - develop
     - master
 
-# 3. Стадия деплоя в Staging окружение (ветка develop)
 deploy_staging:
   stage: deploy_staging
   image: alpine/git
@@ -55,19 +50,14 @@ deploy_staging:
     - develop
   script:
     - echo "=== Обновление манифестов для staging с использованием образа $DOCKER_IMAGE ==="
-    # Обновляем тег образа в k8s/staging/deployment.yaml
     - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/staging/deployment.yaml'
-    # Добавляем изменения в git
     - git add k8s/staging/deployment.yaml
-    # Коммитим изменения с [skip ci], чтобы избежать повторного запуска пайплайна
     - git commit -m "Update staging image to $DOCKER_TAG for develop [skip ci]"
-    # Пушим изменения обратно в ветку develop
     - git push origin HEAD:develop
   environment:
     name: staging
-    url: "http://192.168.49.2:30080"
+    url: "http://example-staging-url"
 
-# 4. Стадия деплоя в Production окружение (ветка master)
 deploy_production:
   stage: deploy_production
   image: alpine/git
@@ -75,14 +65,10 @@ deploy_production:
     - master
   script:
     - echo "=== Обновление манифестов для production с использованием образа $DOCKER_IMAGE ==="
-    # Обновляем тег образа в k8s/production/deployment.yaml
     - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yaml'
-    # Добавляем изменения в git
     - git add k8s/production/deployment.yaml
-    # Коммитим изменения с [skip ci], чтобы избежать повторного запуска пайплайна
     - git commit -m "Update production image to $DOCKER_TAG for master [skip ci]"
-    # Пушим изменения обратно в ветку master
     - git push origin HEAD:master
   environment:
     name: production
-    url: "http://192.168.49.2:30080"
+    url: "http://example-production-url"
