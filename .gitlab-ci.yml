@@ -106,7 +106,11 @@ deploy_production:
   image:
     name: bitnami/kubectl:latest
     entrypoint: [""]
+  variables:
+    KUBECONFIG: "/root/.kube/config"
   script:
+    - mkdir -p /root/.kube
+    - echo "$KUBECONFIG_FILE" > /root/.kube/config
     - echo "Deploy to Production..."
     - kubectl apply -f k8s/production
   environment:

@@ -1,3 +1,10 @@
+#image:
+#  tag: v17.7.0
+#
+#config:
+#  token: glagent-xU5LEXNPmZVkFyTzxSzDdamyshTC7nTGPbdPxEPAxK8CMWGEGw
+#  kasAddress: wss://gitlab.local/-/kubernetes-agent/
+
 ci_access:
   projects:
     - id: "root/gitlab-kb8-cicd-example"
@@ -8,7 +15,5 @@ gitops:
   manifest_projects:
     - id: "root/gitlab-kb8-cicd-example"   # или <числовой ID проекта>
       paths:
-        - path: "k8s/staging"             # папка с манифестами в репозитории
-#      deploy_agent:
-#        kubectl:
-#        # Доп. настройки kubectl apply
+        - "k8s/staging"                     # папка с манифестами в репозитории
+        - "k8s/production"                     # папка с манифестами в репозитории
