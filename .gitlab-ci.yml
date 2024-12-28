@@ -4,9 +4,9 @@ stages:
 #  - deploy_staging
 #  - deploy_production
 
-before_script:
-  - git config --global user.email "ci@example.com"
-  - git config --global user.name "CI/CD"
+#before_script:
+#  - git config --global user.email "ci@example.com"
+#  - git config --global user.name "CI/CD"
 
 # Стадия сборки для ветки develop
 #build_develop:
