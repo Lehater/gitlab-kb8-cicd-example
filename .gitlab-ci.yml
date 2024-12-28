@@ -56,7 +56,6 @@ test:
   #  image: eclipse-temurin:17
   script:
     - echo "=== Запуск тестов для Java 17 приложения ==="
-  #    - ./run_tests.sh  # Замените на реальные команды тестирования
   only:
     - develop
     - master
@@ -73,7 +72,7 @@ deploy_staging:
   #    - git push origin HEAD:develop
   environment:
     name: staging
-    url: "http://example-staging-url"
+#    url: "http://example-staging-url"
   only:
     - develop
 
@@ -89,6 +88,6 @@ deploy_production:
   #    - git push origin HEAD:master
   environment:
     name: production
-    url: "http://example-production-url"
+#    url: "http://example-production-url"
   only:
     - master
