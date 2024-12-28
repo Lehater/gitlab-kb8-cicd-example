@@ -103,12 +103,11 @@ deploy_staging:
 
 deploy_production:
   stage: deploy_production
-  image: registry.gitlab.com/gitlab-org/cluster-integration/gitlab-agent/agentk
+  image: bitnami/kubectl:latest
   script:
     - echo "Deploy to Production..."
     - kubectl apply -f k8s/production
   environment:
     name: production
   only:
-    - tags
     - main

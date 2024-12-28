@@ -25,6 +25,11 @@ services:
     networks:
       - gitlab-network
 
+  gitlab-agentk:
+    image: bitnami/kubectl:latest
+    container_name: gak
+
+
 
 #  gitlab-runner:
 #    image: gitlab/gitlab-runner:latest
