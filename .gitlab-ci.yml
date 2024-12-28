@@ -58,7 +58,7 @@ deploy_staging:
   script:
     - echo "=== Updating staging manifests to use $DOCKER_IMAGE ==="
     # Предполагаем, что deployment.yaml лежит в k8s/staging/deployment.yaml
-    - sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/staging/deployment.yaml
+    - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/staging/deployment.yaml'
     - git add k8s/staging/deployment.yaml
     - git commit -m "Update staging image to $DOCKER_TAG [skip ci]"
     - git push origin HEAD:develop
@@ -75,7 +75,7 @@ deploy_production:
   script:
     - echo "=== Updating production manifests to use $DOCKER_IMAGE ==="
     # Предполагаем, что deployment.yaml лежит в k8s/production/deployment.yaml
-    - sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yaml
+    - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yaml'
     - git add k8s/production/deployment.yaml
     - git commit -m "Update production image to $DOCKER_TAG [skip ci]"
     - git push origin HEAD:master
