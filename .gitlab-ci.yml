@@ -35,11 +35,11 @@ build_develop:
 build_main:
   stage: build
   image: openjdk:17-alpine
-#  services:
-#    - docker:dind
-#  variables:
-#    DOCKER_DRIVER: overlay2
-#    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
   script:
     - export DOCKER_TAG="latest"
     - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
