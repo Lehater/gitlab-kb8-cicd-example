@@ -103,11 +103,12 @@ deploy_staging:
 
 deploy_production:
   stage: deploy_production
-  image: bitnami/kubectl:latest
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
   script:
     - echo "Deploy to Production..."
-#    - kubectl apply -f k8s/production
-    - apply -f k8s/production
+    - kubectl apply -f k8s/production
   environment:
     name: production
   only:
