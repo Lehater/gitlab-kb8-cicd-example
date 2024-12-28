@@ -17,9 +17,9 @@ build_main:
     # Логин в реестр (важно: вы должны прописать "insecure-registries" на самом хосте)
     - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
     # Сборка образа
-    - docker build -t 192.168.88.83:5080/root/"$DOCKER_IMAGE" .
+    - docker build -t 192.168.88.83:5050/root/"$DOCKER_IMAGE" .
     # Пуш образа
-    - docker push 192.168.88.83:5080/root/"$DOCKER_IMAGE"
+    - docker push 192.168.88.83:5050/root/"$DOCKER_IMAGE"
   only:
     - main
 
