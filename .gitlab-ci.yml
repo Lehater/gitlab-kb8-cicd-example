@@ -19,7 +19,9 @@ build_main:
     - export DOCKER_TAG="production"
     - export DOCKER_IMAGE="my-app:${DOCKER_TAG}"
 #    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "https://gitlab.local:5050/v2/"
+    - echo "$CI_REGISTRY_PASSWORD", "$CI_REGISTRY","$CI_REGISTRY_USER"
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+#    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "https://gitlab.local:5050/v2/"
     - docker build -t "$DOCKER_IMAGE" .
     - docker push "$DOCKER_IMAGE"
   only:
