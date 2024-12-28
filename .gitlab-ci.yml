@@ -4,75 +4,20 @@ stages:
   - deploy_staging
   - deploy_production
 
-#before_script:
-#  - git config --global user.email "ci@example.com"
-#  - git config --global user.name "CI/CD"
-
-# Стадия сборки для ветки develop
-#build_develop:
-#  stage: build
-#  image: openjdk:17-alpine
-#  #  services:
-#  #    - docker:dind
-#  variables:
-#    DOCKER_TAG: "develop"
-#    DOCKER_IMAGE: "${CI_REGISTRY_IMAGE}:develop"
-#    DOCKER_DRIVER: overlay2
-#    DOCKER_TLS_CERTDIR: ""
-#  script:
-#    #    - export DOCKER_TAG="develop"
-#    #    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
-#    - echo "=== Сборка Docker-образа ${DOCKER_IMAGE} ==="
-#    #    - docker build -t "$DOCKER_IMAGE" .
-#    - echo "=== Вход в Docker Registry ==="
-#    #    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-#    - echo "=== Пуш Docker-образа ${DOCKER_IMAGE} ==="
-#  #    - docker push "$DOCKER_IMAGE"
-#  only:
-#    - develop
-##
-
-
-#variables:
-#  DOCKER_DRIVER: overlay2  # Improves performance.
-#  # https://gitlab.com/help/user/project/container_registry
-#  TERRAFORM_IMAGE_NAME: $CI_REGISTRY_IMAGE/terraform
-#
-#Build Docker image:
-#  stage: build
-#  only:
-#    changes:
-#      - docker/terraform/**
-#      - .gitlab-ci.yml
-#  interruptible: true
-#  image: docker:stable
-#  # Docker-in-Docker service is required to build Docker images.
-#  # https://gitlab.com/help/ci/docker/using_docker_build.md
-#  # https://gitlab.com/gitlab-org/charts/gitlab/issues/478#note_215249152
-#  services:
-#    - docker:dind
-#  script:
-#    - docker info
-#    - docker -D login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-#    - docker -D build -t $TERRAFORM_IMAGE_NAME docker/terraform/  # Dockerfile lives here.
-#    - docker -D push $TERRAFORM_IMAGE_NAME
-
-
 # Стадия сборки для ветки master
 build_main:
   stage: build
   image: docker:stable
   services:
-    - docker:dind
+    - name: docker:dind
+      alias: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
     DOCKER_DRIVER: overlay2
-    TERRAFORM_IMAGE_NAME: $CI_REGISTRY_IMAGE/terraform
   script:
     - docker info
     - export DOCKER_TAG="production"
-#    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
     - export DOCKER_IMAGE="my-app:${DOCKER_TAG}"
     - echo "=== Сборка Docker-образа ==="
     - docker build -t "$DOCKER_IMAGE" .
