@@ -83,7 +83,7 @@ deploy_staging:
 # Стадия деплоя в production для ветки master
 deploy_production:
   stage: deploy_production
-  #  image: alpine/git
+  image: alpine/git
   variables:
     DOCKER_TAG: "develop"
   script:
