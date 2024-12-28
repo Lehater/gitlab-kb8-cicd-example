@@ -11,12 +11,12 @@ before_script:
 # Стадия сборки для ветки develop
 build_develop:
   stage: build
-  image: docker:latest
-  services:
-    - docker:dind
-  variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
+#  image: docker:latest
+#  services:
+#    - docker:dind
+#  variables:
+#    DOCKER_DRIVER: overlay2
+#    DOCKER_TLS_CERTDIR: ""
   script:
 #    - export DOCKER_TAG="develop"
 #    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
@@ -32,12 +32,12 @@ build_develop:
 # Стадия сборки для ветки master
 build_master:
   stage: build
-  image: docker:latest
-  services:
-    - docker:dind
-  variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
+#  image: docker:latest
+#  services:
+#    - docker:dind
+#  variables:
+#    DOCKER_DRIVER: overlay2
+#    DOCKER_TLS_CERTDIR: ""
   script:
 #    - export DOCKER_TAG="latest"
 #    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
@@ -53,7 +53,7 @@ build_master:
 # Стадия тестирования для всех веток
 test:
   stage: test
-  image: eclipse-temurin:17
+#  image: eclipse-temurin:17
   script:
     - echo "=== Запуск тестов для Java 17 приложения ==="
 #    - ./run_tests.sh  # Замените на реальные команды тестирования
@@ -64,7 +64,7 @@ test:
 # Стадия деплоя в staging для ветки develop
 deploy_staging:
   stage: deploy_staging
-  image: alpine/git
+#  image: alpine/git
   script:
     - echo "=== Обновление манифестов для staging с использованием образа ==="
 #    - sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/staging/deployment.yaml
@@ -80,7 +80,7 @@ deploy_staging:
 # Стадия деплоя в production для ветки master
 deploy_production:
   stage: deploy_production
-  image: alpine/git
+#  image: alpine/git
   script:
     - echo "=== Обновление манифестов для production с использованием образа ==="
 #    - sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yaml
