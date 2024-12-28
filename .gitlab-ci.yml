@@ -17,7 +17,7 @@ build_develop:
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
-  script:
+#  script:
 #    - export DOCKER_TAG="develop"
 #    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
 #    - echo "=== Сборка Docker-образа $DOCKER_IMAGE ==="
