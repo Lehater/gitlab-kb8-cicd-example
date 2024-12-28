@@ -35,22 +35,22 @@ build_develop:
 build_main:
   stage: build
   image: openjdk:17-alpine
-  #  services:
-  #    - docker:dind
-  #  variables:
-  #    DOCKER_DRIVER: overlay2
-  #    DOCKER_TLS_CERTDIR: ""
+#  services:
+#    - docker:dind
+#  variables:
+#    DOCKER_DRIVER: overlay2
+#    DOCKER_TLS_CERTDIR: ""
   script:
-    #    - export DOCKER_TAG="latest"
-    #    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
+    - export DOCKER_TAG="latest"
+    - export DOCKER_IMAGE="${CI_REGISTRY_IMAGE}:${DOCKER_TAG}"
     - echo "=== Сборка Docker-образа ==="
-    #    - docker build -t "$DOCKER_IMAGE" .
+    - docker build -t "$DOCKER_IMAGE" .
     - echo "=== Вход в Docker Registry ==="
-    #    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
     - echo "=== Пуш Docker-образа ==="
-#    - docker push "$DOCKER_IMAGE"
+    - docker push "$DOCKER_IMAGE"
   only:
-    - main1
+    - main
 
 # Стадия тестирования для всех веток
 test:
