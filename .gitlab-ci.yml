@@ -65,9 +65,10 @@ build_main:
   services:
     - docker:dind
   variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
     DOCKER_DRIVER: overlay2
     TERRAFORM_IMAGE_NAME: $CI_REGISTRY_IMAGE/terraform
-    DOCKER_TLS_CERTDIR: "/certs"
   script:
     - docker info
     - export DOCKER_TAG="production"
