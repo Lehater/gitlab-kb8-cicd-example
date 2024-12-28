@@ -106,7 +106,8 @@ deploy_production:
   image: bitnami/kubectl:latest
   script:
     - echo "Deploy to Production..."
-    - kubectl apply -f k8s/production
+#    - kubectl apply -f k8s/production
+    - apply -f k8s/production
   environment:
     name: production
   only:
