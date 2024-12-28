@@ -1,6 +1,0 @@
-ci_access:
-  projects:
-    - id: gitlab-kb8-cicd-example
-observability:
-  logging:
-    level: info
