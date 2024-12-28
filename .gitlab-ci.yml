@@ -48,7 +48,7 @@ build_master:
     - echo "=== Пуш Docker-образа ==="
 #    - docker push "$DOCKER_IMAGE"
   only:
-    - master
+    - main
 
 # Стадия тестирования для всех веток
 test:
@@ -58,7 +58,7 @@ test:
     - echo "=== Запуск тестов для Java 17 приложения ==="
   only:
     - develop
-    - master
+    - main
 
 # Стадия деплоя в staging для ветки develop
 deploy_staging:
@@ -90,4 +90,4 @@ deploy_production:
     name: production
 #    url: "http://example-production-url"
   only:
-    - master
+    - main
