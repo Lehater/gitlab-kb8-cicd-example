@@ -20,12 +20,12 @@ build:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
   script:
-    - |
-      if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
-        export DOCKER_TAG="latest"
-      else
-        export DOCKER_TAG="${CI_COMMIT_REF_SLUG}"
-      fi
+#    - |
+#      if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+    - export DOCKER_TAG="latest"
+#      else
+#        export DOCKER_TAG="${CI_COMMIT_REF_SLUG}"
+#      fi
     - echo "=== Сборка Docker-образа $DOCKER_IMAGE ==="
     - docker build -t "$DOCKER_IMAGE" .
     - echo "=== Вход в Docker Registry ==="
