@@ -6,4 +6,4 @@ test-job:
   script:
     - echo "Runner is working!"
   tags:
-    - runner-on-ubuntu
+    - minikube
