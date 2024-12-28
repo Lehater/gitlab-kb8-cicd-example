@@ -62,23 +62,23 @@ test:
     - develop
     - main1
 
-# Стадия деплоя в staging для ветки develop
-deploy_staging:
-  stage: deploy_staging
-  image: alpine/git
-  script:
-    - git config --global user.email "ci@example.com"
-    - git config --global user.name "CI/CD"
-    - echo "=== Обновление манифестов для staging с использованием образа ==="
-    - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/staging/deployment.yml'
-    - git add k8s/staging/deployment.yaml
-    - git commit -m "Update staging image to $DOCKER_TAG for develop [skip ci]"
-    - git push origin HEAD:develop
-  environment:
-    name: staging
-#    url: "http://example-staging-url"
-  only:
-    - develop
+## Стадия деплоя в staging для ветки develop
+#deploy_staging:
+#  stage: deploy_staging
+#  image: alpine/git
+#  script:
+#    - git config --global user.email "ci@example.com"
+#    - git config --global user.name "CI/CD"
+#    - echo "=== Обновление манифестов для staging с использованием образа ==="
+#    - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/staging/deployment.yml'
+#    - git add k8s/staging/deployment.yaml
+#    - git commit -m "Update staging image to $DOCKER_TAG for develop [skip ci]"
+#    - git push origin HEAD:develop
+#  environment:
+#    name: staging
+##    url: "http://example-staging-url"
+#  only:
+#    - develop
 
 # Стадия деплоя в production для ветки master
 #deploy_production:
@@ -101,19 +101,19 @@ deploy_staging:
 #  only:
 #    - main
 
-deploy_production:
-  stage: deploy_production
-  image:
-    name: bitnami/kubectl:latest
-    entrypoint: [""]
-  variables:
-    KUBECONFIG: "/root/.kube/config"
-  script:
-    - mkdir -p /root/.kube
-    - echo "$KUBECONFIG_FILE" > /root/.kube/config
-    - echo "Deploy to Production..."
-    - kubectl apply -f k8s/production
-  environment:
-    name: production
-  only:
-    - main
+#deploy_production:
+#  stage: deploy_production
+#  image:
+#    name: bitnami/kubectl:latest
+#    entrypoint: [""]
+#  variables:
+#    KUBECONFIG: "/root/.kube/config"
+#  script:
+#    - mkdir -p /root/.kube
+#    - echo "$KUBECONFIG_FILE" > /root/.kube/config
+#    - echo "Deploy to Production..."
+#    - kubectl apply -f k8s/production
+#  environment:
+#    name: production
+#  only:
+#    - main

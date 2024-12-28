@@ -14,6 +14,6 @@ observability:
 gitops:
   manifest_projects:
     - id: "root/gitlab-kb8-cicd-example"   # или <числовой ID проекта>
+      default_namespace: gitlab-agent-minikube-agent
       paths:
-        - "k8s/staging"                     # папка с манифестами в репозитории
-        - "k8s/production"                     # папка с манифестами в репозитории
+        - glob: "k8s/**/*.yml"                     # папка с манифестами в репозитории
