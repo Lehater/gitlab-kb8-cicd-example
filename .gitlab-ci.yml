@@ -57,9 +57,9 @@ test:
   script:
     - echo "=== Запуск тестов для Java 17 приложения ==="
 #    - ./run_tests.sh  # Замените на реальные команды тестирования
-  only:
-    - develop
-    - master
+#  only:
+#    - develop
+#    - master
 
 # Стадия деплоя в staging для ветки develop
 #deploy_staging:
