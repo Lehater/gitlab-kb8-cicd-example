@@ -8,15 +8,15 @@ stages:
 build_main:
   stage: build
   image: docker:stable
-  services:
-    - name: docker:dind
-      alias: docker
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
-    DOCKER_DRIVER: overlay2
+#  services:
+#    - name: docker:dind
+#      alias: docker
+#  variables:
+#    DOCKER_HOST: tcp://docker:2375
+#    DOCKER_TLS_CERTDIR: ""
+#    DOCKER_DRIVER: overlay2
   script:
-    - docker info
+#    - docker info
     - export DOCKER_TAG="production"
     - export DOCKER_IMAGE="my-app:${DOCKER_TAG}"
     - echo "=== Сборка Docker-образа ==="
