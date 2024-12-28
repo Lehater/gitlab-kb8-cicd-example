@@ -47,8 +47,8 @@ build_master:
     #    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
     - echo "=== Пуш Docker-образа ==="
 #    - docker push "$DOCKER_IMAGE"
-#  only:
-#    - master
+  only:
+    - master
 
 # Стадия тестирования для всех веток
 test:
