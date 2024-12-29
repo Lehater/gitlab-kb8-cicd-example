@@ -1,13 +1,28 @@
 stages:
   - build
   - test
-  - deploy_staging
-  - deploy_production
 
 variables:
   APP_NAME: "simple-java-web-app"
 
-# Стадия сборки для ветки master
+# Стадия сборки для ветки develop
+build_develop:
+  stage: build
+  # Образ, в котором есть Docker CLI
+  image: docker:stable
+  script:
+    - export DOCKER_IMAGE="lehater/${APP_NAME}:stage"
+    # Логин в Docker Hub
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+    # Сборка образа с локальным тегом
+    - docker build -t $DOCKER_IMAGE .
+    # Пуш образа в Docker Hub
+    - docker push $DOCKER_IMAGE
+  only:
+    - develop
+
+
+# Стадия сборки для ветки main
 build_main:
   stage: build
   # Образ, в котором есть Docker CLI
@@ -20,13 +35,6 @@ build_main:
     - docker build -t $DOCKER_IMAGE .
     # Пуш образа в Docker Hub
     - docker push $DOCKER_IMAGE
-
-#    # Логин в Docker Registry
-#    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
-#    # Сборка образа с локальным тегом
-#    - docker build -t $CI_REGISTRY/root/gitlab-kb8-cicd-example/$DOCKER_IMAGE .
-#    # Пуш образа в реестр
-#    - docker push $CI_REGISTRY/root/gitlab-kb8-cicd-example/$DOCKER_IMAGE
   only:
     - main
 
@@ -36,6 +44,7 @@ test:
   #  image: eclipse-temurin:17
   script:
     - echo "=== Запуск тестов для приложения ==="
+    - echo "=== Тесты пропущены т.к. в задании важен CI/CD пайплайн ==="
   only:
-    - develop1
-    - main1
+    - develop
+    - main
