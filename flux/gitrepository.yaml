@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
-  url: ssh://git@gitlab.local/root/gitlab-kb8-cicd-example.git
+  url: ssh://git@192.168.88.82/root/gitlab-kb8-cicd-example.git
   ref:
     branch: main
   secretRef:
