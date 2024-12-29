@@ -4,10 +4,12 @@ ci_access:
 observability:
   logging:
     level: debug
-gitops:
-  manifest_projects:
-    - id: "*"  # Позволяет агенту синхронизировать манифесты из всех доступных проектов
-      default_namespace: default  # Использовать default namespace, если не указан явно
-      paths:
-        - glob: "k8s/*.yaml"
-        - glob: "k8s/manifest/**/*.yml"
+flux:
+  enabled: true
+#gitops:
+#  manifest_projects:
+#    - id: "*"  # Позволяет агенту синхронизировать манифесты из всех доступных проектов
+#      default_namespace: default  # Использовать default namespace, если не указан явно
+#      paths:
+#        - glob: "k8s/*.yaml"
+#        - glob: "k8s/manifest/**/*.yml"
