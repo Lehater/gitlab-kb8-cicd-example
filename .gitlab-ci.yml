@@ -11,13 +11,21 @@ build_main:
   image: docker:stable
   script:
     - export DOCKER_TAG="production"
-    - export DOCKER_IMAGE="my-app:${DOCKER_TAG}"
-    # Логин в Docker Registry
-    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+    - export DOCKER_IMAGE="lehater/my-app:${DOCKER_TAG}"
+    # Логин в Docker Hub
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     # Сборка образа с локальным тегом
-    - docker build -t $CI_REGISTRY/root/gitlab-kb8-cicd-example/$DOCKER_IMAGE .
-    # Пуш образа в реестр
-    - docker push $CI_REGISTRY/root/gitlab-kb8-cicd-example/$DOCKER_IMAGE
+    - docker build -t $DOCKER_IMAGE .
+    # Пуш образа в Docker Hub
+    - docker push $DOCKER_IMAGE
+
+#    - export DOCKER_IMAGE="my-app:${DOCKER_TAG}"
+#    # Логин в Docker Registry
+#    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+#    # Сборка образа с локальным тегом
+#    - docker build -t $CI_REGISTRY/root/gitlab-kb8-cicd-example/$DOCKER_IMAGE .
+#    # Пуш образа в реестр
+#    - docker push $CI_REGISTRY/root/gitlab-kb8-cicd-example/$DOCKER_IMAGE
   only:
     - main
 
@@ -26,47 +34,7 @@ test:
   stage: test
   #  image: eclipse-temurin:17
   script:
-    - echo "=== Запуск тестов для Java 17 приложения ==="
-    - docker info
-    - docker ps
+    - echo "=== Запуск тестов для приложения ==="
   only:
     - develop
-    - main1
-
-# Стадия деплоя в production для ветки master
-#deploy_production:
-#  stage: deploy_production
-##  image: alpine/git
-##  variables:
-##    DOCKER_TAG: "develop"
-#  script:
-#    - apk add --no-cache git
-#    - git config --global user.email "ci@example.com"
-#    - git config --global user.name "CI/CD"
-#    - echo "=== Обновление манифестов для production с использованием образа ==="
-#    - 'sed -i "s|image: .*|image: $DOCKER_IMAGE|" k8s/production/deployment.yml'
-#    - git add k8s/production/deployment.yaml
-#    - git commit -m "Update production image to $DOCKER_TAG for master [skip ci]"
-#    - git push origin HEAD:master
-#  environment:
-#    name: production
-##    url: "http://example-production-url"
-#  only:
-#    - main
-
-#deploy_production:
-#  stage: deploy_production
-#  image:
-#    name: bitnami/kubectl:latest
-#    entrypoint: [""]
-#  variables:
-#    KUBECONFIG: "/root/.kube/config"
-#  script:
-#    - mkdir -p /root/.kube
-#    - echo "$KUBECONFIG_FILE" > /root/.kube/config
-#    - echo "Deploy to Production..."
-#    - kubectl apply -f k8s/production
-#  environment:
-#    name: production
-#  only:
-#    - main
+    - main
