@@ -18,4 +18,4 @@ RUN mvn dependency:resolve
 RUN mvn package
 
 # Указываем команду для запуска
-CMD ["java", "-jar", "target/app-1.0-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/simple-java-app-1.0-SNAPSHOT.jar"]

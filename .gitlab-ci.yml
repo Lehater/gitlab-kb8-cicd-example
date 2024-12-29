@@ -4,14 +4,16 @@ stages:
   - deploy_staging
   - deploy_production
 
+variables:
+  APP_NAME: "simple-java-web-app"
+
 # Стадия сборки для ветки master
 build_main:
   stage: build
   # Образ, в котором есть Docker CLI
   image: docker:stable
   script:
-    - export DOCKER_TAG="production"
-    - export DOCKER_IMAGE="lehater/my-app:${DOCKER_TAG}"
+    - export DOCKER_IMAGE="lehater/${APP_NAME}:production"
     # Логин в Docker Hub
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     # Сборка образа с локальным тегом
@@ -19,7 +21,6 @@ build_main:
     # Пуш образа в Docker Hub
     - docker push $DOCKER_IMAGE
 
-#    - export DOCKER_IMAGE="my-app:${DOCKER_TAG}"
 #    # Логин в Docker Registry
 #    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
 #    # Сборка образа с локальным тегом
