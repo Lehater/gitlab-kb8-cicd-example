@@ -18,7 +18,7 @@ spec:
       containers:
         - name: my-app
 #          image: 192.168.88.82:5050/root/my-app:production
-          image: lehater/my-app:latest
+          image: lehater/java-app
           ports:
             - containerPort: 80
 #      imagePullSecrets:
