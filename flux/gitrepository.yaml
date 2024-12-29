@@ -1,0 +1,10 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: my-app-repo
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: ssh://git@gitlab.local/root/gitlab-kb8-cicd-example.git
+  ref:
+    branch: main
