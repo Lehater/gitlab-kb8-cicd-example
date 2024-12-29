@@ -11,9 +11,7 @@ build_develop:
   # Образ, в котором есть Docker CLI
   image: docker:stable
   script:
-    - 'echo "DOCKER_HUB_USERNAME: $DOCKER_HUB_USERNAME"'
-    - 'echo "DOCKER_HUB_PASSWORD: ${#DOCKER_HUB_PASSWORD} characters"'
-    - export DOCKER_IMAGE="lehater/${APP_NAME}:stage"
+    - export DOCKER_IMAGE="lehater/${APP_NAME}:staging"
     # Логин в Docker Hub
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
     # Сборка образа с локальным тегом
