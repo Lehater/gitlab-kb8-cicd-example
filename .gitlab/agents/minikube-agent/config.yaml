@@ -1,20 +1,14 @@
-#image:
-#  tag: v17.7.0
-#
-#config:
-#  token: glagent-xU5LEXNPmZVkFyTzxSzDdamyshTC7nTGPbdPxEPAxK8CMWGEGw
-#  kasAddress: wss://gitlab.local/-/kubernetes-agent/
-
 ci_access:
-  projects:
-    - id: "root/gitlab-kb8-cicd-example"
+  groups:
+    - id: "root"
+      access_level: maintainer
 observability:
   logging:
-    level: info
+    level: debug
 gitops:
   manifest_projects:
-    - id: "root/gitlab-kb8-cicd-example"   # или <числовой ID проекта>
-      default_namespace: gitlab-agent-minikube-agent
+    - id: "*"  # Позволяет агенту синхронизировать манифесты из всех доступных проектов
+      default_namespace: default  # Использовать default namespace, если не указан явно
       paths:
-        - glob: "k8s/staging/*.yml"                     # папка с манифестами в репозитории
-        - glob: "k8s/production/*.yml"                     # папка с манифестами в репозитории
+        - glob: "k8s/*.yaml"
+        - glob: "k8s/manifest/**/*.yml"

@@ -15,8 +15,8 @@ data:
         }
         prometheus :9153
         hosts {
-           192.168.88.83 gitlab.local
-           192.168.88.83 registry.gitlab.local
+           192.168.88.82 gitlab.local
+           192.168.88.82 registry.gitlab.local
            192.168.49.1 host.minikube.internal
            fallthrough
         }
