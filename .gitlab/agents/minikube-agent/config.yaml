@@ -1,7 +1,6 @@
 ci_access:
   groups:
     - id: "root"
-      access_level: maintainer
 observability:
   logging:
     level: debug
